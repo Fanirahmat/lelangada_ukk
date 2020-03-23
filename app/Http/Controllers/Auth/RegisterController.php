@@ -75,7 +75,7 @@ class RegisterController extends Controller
             'address' => $data['address'],
             'phone' => $data['phone'],
             'avatar' => 'avatar belum ditambahkan',
-            'roles' => json_encode(["ADMIN"]),
+            'roles' => json_encode(["CUSTOMER"]),
             'status' => 'ACTIVE'
         ]);
     }

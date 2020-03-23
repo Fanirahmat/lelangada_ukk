@@ -16,6 +16,8 @@
   <link href="{{ asset('assets/js/plugins/@fortawesome/fontawesome-free/css/all.min.css') }}" rel="stylesheet" />
   <!-- CSS Files -->
   <link href="{{ asset('assets/css/argon-dashboard.css?v=1.1.2') }}" rel="stylesheet" />
+
+  <script src="{{ asset('assets/js/plugins/jquery/dist/jquery.min.js') }}"></script>
 </head>
 
 <body class="">
@@ -62,18 +64,10 @@
               <i class="ni ni-settings-gear-65"></i>
               <span>Settings</span>
             </a>
-            <a href="./examples/profile.html" class="dropdown-item">
-              <i class="ni ni-calendar-grid-58"></i>
-              <span>Activity</span>
-            </a>
-            <a href="./examples/profile.html" class="dropdown-item">
-              <i class="ni ni-support-16"></i>
-              <span>Support</span>
-            </a>
             <div class="dropdown-divider"></div>
-            <a href="#!" class="dropdown-item">
+            <a href="{{ route('logout') }}" class="dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
               <i class="ni ni-user-run"></i>
-              <span>Logout</span>
+              <span>{{ __('Logout') }}</span>
             </a>
           </div>
         </li>
@@ -108,43 +102,59 @@
           </div>
         </form>
         <!-- Navigation -->
-        <ul class="navbar-nav">
-          <li class="nav-item  active ">
-            <a class="nav-link  active " href="./index.html">
-              <i class="ni ni-tv-2 text-primary"></i> Dashboard
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link " href="./examples/icons.html">
-              <i class="ni ni-planet text-blue"></i> Icons
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link " href="./examples/maps.html">
-              <i class="ni ni-pin-3 text-orange"></i> Maps
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link " href="./examples/profile.html">
-              <i class="ni ni-single-02 text-yellow"></i> User profile
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link " href="./examples/tables.html">
-              <i class="ni ni-bullet-list-67 text-red"></i> Tables
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="./examples/login.html">
-              <i class="ni ni-key-25 text-info"></i> Login
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="./examples/register.html">
-              <i class="ni ni-circle-08 text-pink"></i> Register
-            </a>
-          </li>
-        </ul>
+        @if ( Auth::user()->roles == '["ADMIN"]' )
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="./index.html">
+                <i class="ni ni-tv-2 text-primary"></i> Dashboard Admin
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " href="./examples/icons.html">
+                <i class="ni ni-planet text-blue"></i> Icons
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " href="./examples/maps.html">
+                <i class="ni ni-pin-3 text-orange"></i> Maps
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " href="./examples/profile.html">
+                <i class="ni ni-single-02 text-yellow"></i> User profile
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " href="./examples/tables.html">
+                <i class="ni ni-bullet-list-67 text-red"></i> Tables
+              </a>
+            </li>
+          </ul>
+        @else
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ route('auction.index') }}">
+                <i class="ni ni-tv-2 text-primary"></i> Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " href="{{ route('auction.history') }}">
+                <i class="ni ni-single-copy-04 text-blue"></i> Riwayat 
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " href="{{ route('auction.payment') }}">
+                <i class="ni ni-delivery-fast text-orange"></i> Pembayaran
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " href="./examples/profile.html">
+                <i class="ni ni-single-02 text-yellow"></i> User profile
+              </a>
+            </li>
+          </ul>
+        @endif
+        
         <!-- Divider -->
         <hr class="my-3">
       </div>
@@ -155,7 +165,7 @@
     <nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
       <div class="container-fluid">
         <!-- Brand -->
-        <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="./index.html">Dashboard</a>
+        <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="#">@yield('page')</a></a>
         <!-- Form -->
         <form class="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
           <div class="form-group mb-0">
@@ -176,7 +186,7 @@
                   <img alt="Image placeholder" src="{{ asset('assets/img/theme/team-4-800x800.jpg') }}">
                 </span>
                 <div class="media-body ml-2 d-none d-lg-block">
-                  <span class="mb-0 text-sm  font-weight-bold">Jessica Jones</span>
+                  <span class="mb-0 text-sm  font-weight-bold">{{ Auth::user()->name }}</span>
                 </div>
               </div>
             </a>
@@ -192,19 +202,15 @@
                 <i class="ni ni-settings-gear-65"></i>
                 <span>Settings</span>
               </a>
-              <a href="./examples/profile.html" class="dropdown-item">
-                <i class="ni ni-calendar-grid-58"></i>
-                <span>Activity</span>
-              </a>
-              <a href="./examples/profile.html" class="dropdown-item">
-                <i class="ni ni-support-16"></i>
-                <span>Support</span>
-              </a>
               <div class="dropdown-divider"></div>
-              <a href="#!" class="dropdown-item">
+              <a href="{{ route('logout') }}" class="dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 <i class="ni ni-user-run"></i>
-                <span>Logout</span>
+                <span>{{ __('Logout') }}</span>
               </a>
+
+              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                  @csrf
+              </form>
             </div>
           </li>
         </ul>
@@ -218,7 +224,7 @@
     
   </div>
   <!--   Core   -->
-  <script src="{{ asset('assets/js/plugins/jquery/dist/jquery.min.js') }}"></script>
+  
   <script src="{{ asset('assets/js/plugins/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
   <!--   Optional JS   -->
   <script src="{{ asset('assets/js/plugins/chart.js/dist/Chart.min.js') }}"></script>
@@ -226,6 +232,8 @@
   <!--   Argon JS   -->
   <script src="{{ asset('assets/js/argon-dashboard.min.js?v=1.1.2') }}"></script>
   <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+
+  @yield('footer-scripts')
 
   <script>
     window.TrackJS &&

@@ -13,39 +13,64 @@ class AuctionController extends Controller
      */
     public function index()
     {
-        return view('admin.index');
+        return view('user.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function history()
+    {
+        return view('user.history');
+    }
+
+    public function payment()
+    {
+        return view('user.payment');
+    }
+    
     public function create()
     {
-        //
+        return view('user.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function own()
     {
-        //
+        return view('user.own');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    public function showOwn()
+    {
+        $auction = \App\Auction::where('auctioner_id', \Auth::user()->id)->get();
+        echo json_encode($auction);
+    }
+
+    public function store(Request $req)
+    {
+        \Validator::make($req->all(),[
+            "name" => "required",
+            "description" => "required",
+            "start_price" => "required",
+            "image" => "required",
+            "status" => "required"
+        ])->validate();
+
+        $new = new \App\Auction;
+        $new->auctioner_id = \Auth::user()->id;
+        $new->name = $req->get('name');
+        $new->description = $req->get('description');
+        $new->start_price = $req->get('start_price');
+        $new->status = $req->get('status');
+        $new->image = $req->file('image')->store('auction_image','public');
+        $new->save();
+        if ($req->get('status') == 'dibuka') {
+            return redirect()->route('auction.create')->with('status','Auction successfully saved and opened');
+        } else {
+            return redirect()->route('auction.create')->with('status','Auction successfully saved as closed');
+        }
+    }
+
+    
     public function show($id)
     {
-        //
+        
     }
 
     /**

@@ -16,8 +16,14 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-
+Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard');
 Route::get('/home', 'HomeController@index')->name('home');
+
+//auction
+Route::get('/auction/history', 'AuctionController@history')->name('auction.history');
+Route::get('/auction/payment', 'AuctionController@payment')->name('auction.payment');
+Route::get('/auction/own', 'AuctionController@own')->name('auction.own');
+Route::get('/auction/showOwn','AuctionController@showOwn')->name('auction.showOwn');
 Route::resources([
     'auction' => 'AuctionController'
 ]);
